@@ -13,4 +13,14 @@ public class ErrorHandling
             return operation;
         }
     }
+    public static decimal NumberCorrection(string number)
+    {
+        decimal parsedNumber;
+        while (!decimal.TryParse(number, out parsedNumber))
+        {
+            Console.WriteLine("Invalid number. Please enter a valid number:");
+            number = Console.ReadLine();
+        }
+        return parsedNumber;
+    }
 }

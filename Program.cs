@@ -15,7 +15,7 @@ class Program
                 string operation2 = Console.ReadLine();
                 operation2 = ErrorHandling.OperatorCorrection(operation2);
                 Console.WriteLine("Enter another number:");
-                decimal number3 = decimal.Parse(Console.ReadLine());
+                decimal number3 = ErrorHandling.NumberCorrection(Console.ReadLine());
                 Calculate = CalculateNumbers.calculate(Calculate, number3, operation2);
                 Console.WriteLine("Result: " + Calculate);
                 continue;
