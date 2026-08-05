@@ -9,6 +9,7 @@ public class CalculateNumbers
             "-" => (number1 - number2),
             "*" => (number1 * number2),
             "/" => (number1 / number2),
+            _ => throw new ArgumentException("Invalid operator. Please enter a valid operator (+, -, *, /).")
         };
         return Calculate;
     }

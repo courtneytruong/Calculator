@@ -5,7 +5,7 @@ public class ErrorHandling
         if (operation != "+" && operation != "-" && operation != "*" && operation != "/")
         {
             Console.WriteLine("Invalid operator. Please enter a valid operator (+, -, *, /):");
-            operation = Console.ReadLine();
+            operation = Console.ReadLine() ?? "default";
             return OperatorCorrection(operation);
         }
         else
@@ -19,7 +19,7 @@ public class ErrorHandling
         while (!decimal.TryParse(number, out parsedNumber))
         {
             Console.WriteLine("Invalid number. Please enter a valid number:");
-            number = Console.ReadLine();
+            number = Console.ReadLine() ?? "default";
         }
         return parsedNumber;
     }

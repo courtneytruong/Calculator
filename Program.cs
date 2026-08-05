@@ -8,14 +8,14 @@ class Program
         do
         {
             Console.WriteLine("What do you want to do next?\n1. Continue adding numbers,\n2. Clear the screen,\n3. Exit the program.");
-            string userinput = Console.ReadLine();
+            string userinput = Console.ReadLine() ?? "default";
             if (userinput == "1")
             {
                 Console.WriteLine("Enter another operation:");
-                string operation2 = Console.ReadLine();
+                string operation2 = Console.ReadLine() ?? "default";
                 operation2 = ErrorHandling.OperatorCorrection(operation2);
                 Console.WriteLine("Enter another number:");
-                decimal number3 = ErrorHandling.NumberCorrection(Console.ReadLine());
+                decimal number3 = ErrorHandling.NumberCorrection(Console.ReadLine() ?? "default");
                 Calculate = CalculateNumbers.calculate(Calculate, number3, operation2);
                 Console.WriteLine("Result: " + Calculate);
                 continue;
