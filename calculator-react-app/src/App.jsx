@@ -4,7 +4,9 @@ import CalculatorBody from "./components/calculatorBody";
 function App() {
   return (
     <>
-      <CalculatorBody></CalculatorBody>
+      <div className="flex justify-center items-center bg-black h-screen w-screen">
+        <CalculatorBody></CalculatorBody>
+      </div>
     </>
   );
 }
