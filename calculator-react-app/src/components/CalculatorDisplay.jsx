@@ -1,6 +1,6 @@
 function CalculatorDisplay() {
   return (
-    <div className="flex p-4 justify-end items-end w-full h-1/3 text-3xl font-bold text-white">
+    <div className="flex justify-end items-end text-3xl font-bold text-white px-4 py-2 xl:w-full h-1/3">
       1,234
     </div>
   );
