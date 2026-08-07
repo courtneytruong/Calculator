@@ -18,7 +18,7 @@ const numbersDecimalPoint = [
 function NumbersDecimalPointContainer() {
   return (
     <div className="w-full h-1/6">
-      <div className="grid grid-cols-3 gap-2 justify-center w-full h-full">
+      <div className="grid grid-cols-3 gap-2 pl-2 pt-2 justify-center w-full h-full">
         {numbersDecimalPoint.map((number) => (
           <NumbersDecimalPointButtons
             key={number}
