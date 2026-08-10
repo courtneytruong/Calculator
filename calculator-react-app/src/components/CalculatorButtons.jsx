@@ -1,4 +1,9 @@
-function CalculatorButtons({ label, type }) {
+function CalculatorButtons({
+  label,
+  type,
+  userInput,
+  onClick: handleButtonClick,
+}) {
   const buttonStyles = {
     topRow:
       "flex justify-center items-center text-white text-3xl bg-stone-500 border-1 border-stone-400 hover:bg-stone-400 border-stone-300 w-[70px] h-[70px] rounded-full",
@@ -10,7 +15,12 @@ function CalculatorButtons({ label, type }) {
 
   return (
     <div>
-      <button className={buttonStyles[type]}>{label}</button>
+      <button
+        className={buttonStyles[type]}
+        onClick={() => handleButtonClick(userInput)}
+      >
+        {label}
+      </button>
     </div>
   );
 }
