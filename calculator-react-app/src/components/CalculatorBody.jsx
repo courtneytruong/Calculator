@@ -40,6 +40,7 @@ function CalculatorBody() {
         );
         setDisplayValue(result.toString());
         setFirstOperand(null);
+        setWaitingForSecondOperand(userInput);
       } catch (error) {
         setDisplayValue("Error");
       }
