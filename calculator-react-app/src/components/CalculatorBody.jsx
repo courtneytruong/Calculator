@@ -39,6 +39,7 @@ function CalculatorBody() {
           operator,
         );
         setDisplayValue(result.toString());
+        setFirstOperand(null);
       } catch (error) {
         setDisplayValue("Error");
       }
