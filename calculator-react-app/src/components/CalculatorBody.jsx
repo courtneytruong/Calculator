@@ -17,6 +17,9 @@ function CalculatorBody() {
       case "*":
         return firstOperand * secondOperand;
       case "/":
+        if (secondOperand === 0) {
+          throw new Error("Cannot divide by zero");
+        }
         return firstOperand / secondOperand;
       default:
         return secondOperand;
@@ -41,8 +44,11 @@ function CalculatorBody() {
         setDisplayValue(result.toString());
         setFirstOperand(null);
         setWaitingForSecondOperand(userInput);
-      } catch (error) {
-        setDisplayValue("Error");
+      } catch {
+        setDisplayValue("Cannot divide by zero.");
+        setOperator(null);
+        setFirstOperand(null);
+        setWaitingForSecondOperand(false);
       }
     } else if (["+", "-", "*", "/"].includes(userInput)) {
       if (firstOperand === null) {
