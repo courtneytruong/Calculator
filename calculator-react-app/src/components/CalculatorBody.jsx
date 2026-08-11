@@ -34,6 +34,9 @@ function CalculatorBody() {
       setWaitingForSecondOperand(false);
     } else if (userInput === "backspace") {
       setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
+    } else if (userInput === "%") {
+      const percent = parseFloat(displayValue) / 100;
+      setDisplayValue(percent.toString());
     } else if (userInput === "=") {
       try {
         const result = calculate(
