@@ -9,6 +9,7 @@ function CalculatorBody() {
   const [waitingForSecondOperand, setWaitingForSecondOperand] = useState(false);
   const [lastOperand, setLastOperand] = useState(null);
 
+  // math functions for calculator
   function calculate(firstOperand, secondOperand, operator) {
     switch (operator) {
       case "+":
@@ -27,47 +28,38 @@ function CalculatorBody() {
     }
   }
 
-  function handleButtonClick(userInput) {
-    if (userInput === "clear") {
-      setDisplayValue("0");
-      setOperator(null);
-      setFirstOperand(null);
-      setWaitingForSecondOperand(false);
-    } else if (userInput === "backspace") {
-      setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
-    } else if (userInput === "%") {
-      const percent = parseFloat(displayValue) / 100;
-      setDisplayValue(percent.toString());
-    } else if (userInput === "+/-") {
-      const negative = -parseFloat(displayValue);
-      setDisplayValue(negative.toString());
-    } else if (userInput === "=") {
-      try {
-        if (waitingForSecondOperand) {
-          const result = calculate(firstOperand, lastOperand, operator);
-          setDisplayValue(result.toString());
-          setFirstOperand(result);
-        } else {
-          const result = calculate(
-            firstOperand,
-            parseFloat(displayValue),
-            operator,
-          );
-          setDisplayValue(result.toString());
-          setFirstOperand(result);
-          setWaitingForSecondOperand(userInput);
-          setLastOperand(parseFloat(displayValue));
-        }
-      } catch {
-        setDisplayValue("Cannot divide by zero.");
-        setOperator(null);
-        setFirstOperand(null);
-        setWaitingForSecondOperand(false);
-      }
-    } else if (["+", "-", "*", "/"].includes(userInput)) {
-      if (firstOperand === null) {
-        setFirstOperand(parseFloat(displayValue));
-      } else if (operator) {
+  // resets states to clear the calculator
+  function handleClear() {
+    setDisplayValue("0");
+    setOperator(null);
+    setFirstOperand(null);
+    setWaitingForSecondOperand(false);
+  }
+
+  // backspace function.
+  function handleBackspace() {
+    setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
+  }
+  // percent function divides number by 100 to find percent
+  function handlePercent() {
+    const percent = parseFloat(displayValue) / 100;
+    setDisplayValue(percent.toString());
+  }
+
+  // toggles number between negative and positive
+  function handleNegative() {
+    const negative = -parseFloat(displayValue);
+    setDisplayValue(negative.toString());
+  }
+
+  // logic for how = button works
+  function handleEquals(userInput) {
+    try {
+      if (waitingForSecondOperand) {
+        const result = calculate(firstOperand, lastOperand, operator);
+        setDisplayValue(result.toString());
+        setFirstOperand(result);
+      } else {
         const result = calculate(
           firstOperand,
           parseFloat(displayValue),
@@ -75,20 +67,63 @@ function CalculatorBody() {
         );
         setDisplayValue(result.toString());
         setFirstOperand(result);
+        setWaitingForSecondOperand(userInput);
+        setLastOperand(parseFloat(displayValue));
       }
-      setOperator(userInput);
-      setWaitingForSecondOperand(true);
+    } catch {
+      setDisplayValue("Cannot divide by zero.");
+      setOperator(null);
+      setFirstOperand(null);
+      setWaitingForSecondOperand(false);
+    }
+  }
+
+  // logic for what calculation to do from calculate based on which operator button is used
+  function handleOperator(userInput) {
+    if (firstOperand === null) {
+      setFirstOperand(parseFloat(displayValue));
+    } else if (operator) {
+      const result = calculate(
+        firstOperand,
+        parseFloat(displayValue),
+        operator,
+      );
+      setDisplayValue(result.toString());
+      setFirstOperand(result);
+    }
+    setOperator(userInput);
+    setWaitingForSecondOperand(true);
+  }
+
+  // logic for updating the digits on the display
+  function handleDigit(userInput) {
+    setDisplayValue((prevValue) => {
+      const newValue = waitingForSecondOperand
+        ? userInput
+        : prevValue + userInput;
+      setWaitingForSecondOperand(false);
+      {
+        const shouldOverwrite = waitingForSecondOperand || prevValue === "0";
+        return shouldOverwrite ? userInput : newValue;
+      }
+    });
+  }
+
+  function handleButtonClick(userInput) {
+    if (userInput === "clear") {
+      handleClear();
+    } else if (userInput === "backspace") {
+      handleBackspace();
+    } else if (userInput === "%") {
+      handlePercent();
+    } else if (userInput === "+/-") {
+      handleNegative();
+    } else if (userInput === "=") {
+      handleEquals(userInput);
+    } else if (["+", "-", "*", "/"].includes(userInput)) {
+      handleOperator(userInput);
     } else {
-      setDisplayValue((prevValue) => {
-        const newValue = waitingForSecondOperand
-          ? userInput
-          : prevValue + userInput;
-        setWaitingForSecondOperand(false);
-        {
-          const shouldOverwrite = waitingForSecondOperand || prevValue === "0";
-          return shouldOverwrite ? userInput : newValue;
-        }
-      });
+      handleDigit(userInput);
     }
   }
 
