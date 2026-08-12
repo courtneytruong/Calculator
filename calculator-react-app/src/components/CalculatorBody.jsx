@@ -38,6 +38,9 @@ function CalculatorBody() {
     } else if (userInput === "%") {
       const percent = parseFloat(displayValue) / 100;
       setDisplayValue(percent.toString());
+    } else if (userInput === "+/-") {
+      const negative = -parseFloat(displayValue);
+      setDisplayValue(negative.toString());
     } else if (userInput === "=") {
       try {
         if (waitingForSecondOperand) {
