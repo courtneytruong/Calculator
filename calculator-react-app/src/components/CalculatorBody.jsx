@@ -7,6 +7,7 @@ function CalculatorBody() {
   const [operator, setOperator] = useState(null);
   const [firstOperand, setFirstOperand] = useState(null);
   const [waitingForSecondOperand, setWaitingForSecondOperand] = useState(false);
+  const [lastOperand, setLastOperand] = useState(null);
 
   function calculate(firstOperand, secondOperand, operator) {
     switch (operator) {
@@ -39,14 +40,21 @@ function CalculatorBody() {
       setDisplayValue(percent.toString());
     } else if (userInput === "=") {
       try {
-        const result = calculate(
-          firstOperand,
-          parseFloat(displayValue),
-          operator,
-        );
-        setDisplayValue(result.toString());
-        setFirstOperand(null);
-        setWaitingForSecondOperand(userInput);
+        if (waitingForSecondOperand) {
+          const result = calculate(firstOperand, lastOperand, operator);
+          setDisplayValue(result.toString());
+          setFirstOperand(result);
+        } else {
+          const result = calculate(
+            firstOperand,
+            parseFloat(displayValue),
+            operator,
+          );
+          setDisplayValue(result.toString());
+          setFirstOperand(result);
+          setWaitingForSecondOperand(userInput);
+          setLastOperand(parseFloat(displayValue));
+        }
       } catch {
         setDisplayValue("Cannot divide by zero.");
         setOperator(null);
