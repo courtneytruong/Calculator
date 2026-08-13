@@ -11,20 +11,24 @@ function CalculatorBody() {
 
   // math functions for calculator
   function calculate(firstOperand, secondOperand, operator) {
-    switch (operator) {
-      case "+":
-        return firstOperand + secondOperand;
-      case "-":
-        return firstOperand - secondOperand;
-      case "*":
-        return firstOperand * secondOperand;
-      case "/":
-        if (secondOperand === 0) {
-          throw new Error("Cannot divide by zero");
-        }
-        return firstOperand / secondOperand;
-      default:
-        return secondOperand;
+    if (secondOperand === null) {
+      throw new Error("Missing Second Operand");
+    } else {
+      switch (operator) {
+        case "+":
+          return firstOperand + secondOperand;
+        case "-":
+          return firstOperand - secondOperand;
+        case "*":
+          return firstOperand * secondOperand;
+        case "/":
+          if (secondOperand === 0) {
+            throw new Error("Cannot divide by zero");
+          }
+          return firstOperand / secondOperand;
+        default:
+          return secondOperand;
+      }
     }
   }
 
@@ -70,8 +74,8 @@ function CalculatorBody() {
         setWaitingForSecondOperand(userInput);
         setLastOperand(parseFloat(displayValue));
       }
-    } catch {
-      setDisplayValue("Cannot divide by zero.");
+    } catch (error) {
+      setDisplayValue(error.message);
       setOperator(null);
       setFirstOperand(null);
       setWaitingForSecondOperand(false);
@@ -93,6 +97,7 @@ function CalculatorBody() {
     }
     setOperator(userInput);
     setWaitingForSecondOperand(true);
+    setLastOperand(null);
   }
 
   // logic for updating the digits on the display
