@@ -86,7 +86,7 @@ function CalculatorBody() {
   function handleOperator(userInput) {
     if (firstOperand === null) {
       setFirstOperand(parseFloat(displayValue));
-    } else if (operator) {
+    } else if (operator && !waitingForSecondOperand) {
       const result = calculate(
         firstOperand,
         parseFloat(displayValue),
