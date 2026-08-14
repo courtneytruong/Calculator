@@ -100,6 +100,13 @@ function CalculatorBody() {
     setLastOperand(null);
   }
 
+  function handleDecimal() {
+    if (!displayValue.includes(".")) {
+      setDisplayValue((prevValue) => prevValue + ".");
+      setWaitingForSecondOperand(false);
+    }
+  }
+
   // logic for updating the digits on the display
   function handleDigit(userInput) {
     setDisplayValue((prevValue) => {
@@ -119,6 +126,8 @@ function CalculatorBody() {
       handleClear();
     } else if (userInput === "backspace") {
       handleBackspace();
+    } else if (userInput === ".") {
+      handleDecimal();
     } else if (userInput === "%") {
       handlePercent();
     } else if (userInput === "+/-") {
