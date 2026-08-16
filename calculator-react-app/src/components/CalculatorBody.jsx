@@ -78,7 +78,7 @@ function CalculatorBody() {
       setDisplayValue(error.message);
       setOperator(null);
       setFirstOperand(null);
-      setWaitingForSecondOperand(false);
+      setWaitingForSecondOperand(true);
     }
   }
 
