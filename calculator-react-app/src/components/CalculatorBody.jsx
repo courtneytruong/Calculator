@@ -100,8 +100,12 @@ function CalculatorBody() {
     setLastOperand(null);
   }
 
+  // logic for decimal point button. only allows one decimal point per operand
   function handleDecimal() {
-    if (!displayValue.includes(".")) {
+    if (waitingForSecondOperand) {
+      setDisplayValue("0.");
+      setWaitingForSecondOperand(false);
+    } else if (!displayValue.includes(".")) {
       setDisplayValue((prevValue) => prevValue + ".");
       setWaitingForSecondOperand(false);
     }
