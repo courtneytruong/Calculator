@@ -38,6 +38,7 @@ function CalculatorBody() {
     setOperator(null);
     setFirstOperand(null);
     setWaitingForSecondOperand(false);
+    setLastOperand(null);
   }
 
   // backspace function.
@@ -57,7 +58,7 @@ function CalculatorBody() {
   }
 
   // logic for how = button works
-  function handleEquals(userInput) {
+  function handleEquals() {
     try {
       if (waitingForSecondOperand) {
         const result = calculate(firstOperand, lastOperand, operator);
@@ -71,7 +72,7 @@ function CalculatorBody() {
         );
         setDisplayValue(result.toString());
         setFirstOperand(result);
-        setWaitingForSecondOperand(userInput);
+        setWaitingForSecondOperand(true);
         setLastOperand(parseFloat(displayValue));
       }
     } catch (error) {
@@ -137,7 +138,7 @@ function CalculatorBody() {
     } else if (userInput === "+/-") {
       handleNegative();
     } else if (userInput === "=") {
-      handleEquals(userInput);
+      handleEquals();
     } else if (["+", "-", "*", "/"].includes(userInput)) {
       handleOperator(userInput);
     } else {
