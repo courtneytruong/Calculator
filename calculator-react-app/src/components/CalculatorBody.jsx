@@ -15,21 +15,28 @@ function CalculatorBody() {
     if (secondOperand === null) {
       throw new Error("Missing Second Operand");
     } else {
+      let calculateResult;
       switch (operator) {
         case "+":
-          return firstOperand + secondOperand;
+          calculateResult = firstOperand + secondOperand;
+          break;
         case "-":
-          return firstOperand - secondOperand;
+          calculateResult = firstOperand - secondOperand;
+          break;
         case "*":
-          return firstOperand * secondOperand;
+          calculateResult = firstOperand * secondOperand;
+          break;
         case "/":
           if (secondOperand === 0) {
             throw new Error("Cannot divide by zero");
           }
-          return firstOperand / secondOperand;
+          calculateResult = firstOperand / secondOperand;
+          break;
         default:
-          return secondOperand;
+          calculateResult = secondOperand;
+          break;
       }
+      return parseFloat(calculateResult.toFixed(9));
     }
   }
 
