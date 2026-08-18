@@ -133,15 +133,10 @@ function CalculatorBody() {
   function handleDigit(userInput) {
     setErrorFlagged(false);
     setDisplayValue((prevValue) => {
-      const newValue = waitingForSecondOperand
-        ? userInput
-        : prevValue + userInput;
-      setWaitingForSecondOperand(false);
-      {
-        const shouldOverwrite = waitingForSecondOperand || prevValue === "0";
-        return shouldOverwrite ? userInput : newValue;
-      }
+      const shouldOverwrite = waitingForSecondOperand || prevValue === "0";
+      return shouldOverwrite ? userInput : prevValue + userInput;
     });
+    setWaitingForSecondOperand(false);
   }
 
   function handleButtonClick(userInput) {
