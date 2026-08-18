@@ -8,6 +8,7 @@ function CalculatorBody() {
   const [firstOperand, setFirstOperand] = useState(null);
   const [waitingForSecondOperand, setWaitingForSecondOperand] = useState(false);
   const [lastOperand, setLastOperand] = useState(null);
+  const [errorFlagged, setErrorFlagged] = useState(false);
 
   // math functions for calculator
   function calculate(firstOperand, secondOperand, operator) {
@@ -39,43 +40,56 @@ function CalculatorBody() {
     setFirstOperand(null);
     setWaitingForSecondOperand(false);
     setLastOperand(null);
+    setErrorFlagged(false);
   }
 
   // backspace function.
   function handleBackspace() {
-    setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
+    if (!errorFlagged) {
+      setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
+    } else {
+      handleClear();
+    }
   }
+
   // percent function divides number by 100 to find percent
   function handlePercent() {
-    const percent = parseFloat(displayValue) / 100;
-    setDisplayValue(percent.toString());
+    if (!errorFlagged) {
+      const percent = parseFloat(displayValue) / 100;
+      setDisplayValue(percent.toString());
+    }
   }
 
   // toggles number between negative and positive
   function handleNegative() {
-    const negative = -parseFloat(displayValue);
-    setDisplayValue(negative.toString());
+    if (!errorFlagged) {
+      const negative = -parseFloat(displayValue);
+      setDisplayValue(negative.toString());
+    }
   }
 
   // logic for how = button works
   function handleEquals() {
     try {
-      if (waitingForSecondOperand) {
-        const result = calculate(firstOperand, lastOperand, operator);
-        setDisplayValue(result.toString());
-        setFirstOperand(result);
-      } else {
-        const result = calculate(
-          firstOperand,
-          parseFloat(displayValue),
-          operator,
-        );
-        setDisplayValue(result.toString());
-        setFirstOperand(result);
-        setWaitingForSecondOperand(true);
-        setLastOperand(parseFloat(displayValue));
+      if (!errorFlagged) {
+        if (waitingForSecondOperand) {
+          const result = calculate(firstOperand, lastOperand, operator);
+          setDisplayValue(result.toString());
+          setFirstOperand(result);
+        } else {
+          const result = calculate(
+            firstOperand,
+            parseFloat(displayValue),
+            operator,
+          );
+          setDisplayValue(result.toString());
+          setFirstOperand(result);
+          setWaitingForSecondOperand(true);
+          setLastOperand(parseFloat(displayValue));
+        }
       }
     } catch (error) {
+      setErrorFlagged(true);
       setDisplayValue(error.message);
       setOperator(null);
       setFirstOperand(null);
@@ -85,26 +99,29 @@ function CalculatorBody() {
 
   // logic for what calculation to do from calculate based on which operator button is used
   function handleOperator(userInput) {
-    if (firstOperand === null) {
-      setFirstOperand(parseFloat(displayValue));
-    } else if (operator && !waitingForSecondOperand) {
-      const result = calculate(
-        firstOperand,
-        parseFloat(displayValue),
-        operator,
-      );
-      setDisplayValue(result.toString());
-      setFirstOperand(result);
+    if (!errorFlagged) {
+      if (firstOperand === null) {
+        setFirstOperand(parseFloat(displayValue));
+      } else if (operator && !waitingForSecondOperand) {
+        const result = calculate(
+          firstOperand,
+          parseFloat(displayValue),
+          operator,
+        );
+        setDisplayValue(result.toString());
+        setFirstOperand(result);
+      }
+      setOperator(userInput);
+      setWaitingForSecondOperand(true);
+      setLastOperand(null);
     }
-    setOperator(userInput);
-    setWaitingForSecondOperand(true);
-    setLastOperand(null);
   }
 
   // logic for decimal point button. only allows one decimal point per operand
   function handleDecimal() {
     if (waitingForSecondOperand) {
       setDisplayValue("0.");
+      setErrorFlagged(false);
       setWaitingForSecondOperand(false);
     } else if (!displayValue.includes(".")) {
       setDisplayValue((prevValue) => prevValue + ".");
@@ -114,6 +131,7 @@ function CalculatorBody() {
 
   // logic for updating the digits on the display
   function handleDigit(userInput) {
+    setErrorFlagged(false);
     setDisplayValue((prevValue) => {
       const newValue = waitingForSecondOperand
         ? userInput
