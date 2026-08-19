@@ -147,22 +147,33 @@ function CalculatorBody() {
   }
 
   function handleButtonClick(userInput) {
-    if (userInput === "clear") {
-      handleClear();
-    } else if (userInput === "backspace") {
-      handleBackspace();
-    } else if (userInput === ".") {
-      handleDecimal();
-    } else if (userInput === "%") {
-      handlePercent();
-    } else if (userInput === "+/-") {
-      handleNegative();
-    } else if (userInput === "=") {
-      handleEquals();
-    } else if (["+", "-", "*", "/"].includes(userInput)) {
-      handleOperator(userInput);
-    } else {
-      handleDigit(userInput);
+    switch (userInput) {
+      case "clear":
+        handleClear();
+        break;
+      case "backspace":
+        handleBackspace();
+        break;
+      case ".":
+        handleDecimal();
+        break;
+      case "%":
+        handlePercent();
+        break;
+      case "+/-":
+        handleNegative();
+        break;
+      case "=":
+        handleEquals();
+        break;
+      case "+":
+      case "-":
+      case "*":
+      case "/":
+        handleOperator(userInput);
+        break;
+      default:
+        handleDigit(userInput);
     }
   }
 
