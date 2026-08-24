@@ -52,7 +52,10 @@ function CalculatorBody() {
 
   // backspace function.
   function handleBackspace() {
-    if (!errorFlagged) {
+    if (!waitingForSecondOperand) {
+      setDisplayValue("0");
+      setWaitingForSecondOperand(false);
+    } else if (!errorFlagged) {
       setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
     } else {
       handleClear();
