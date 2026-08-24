@@ -53,10 +53,10 @@ function CalculatorBody() {
   // backspace function.
   function handleBackspace() {
     if (!waitingForSecondOperand) {
+      setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
+    } else if (!errorFlagged) {
       setDisplayValue("0");
       setWaitingForSecondOperand(false);
-    } else if (!errorFlagged) {
-      setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
     } else {
       handleClear();
     }
@@ -67,6 +67,7 @@ function CalculatorBody() {
     if (!errorFlagged) {
       const percent = parseFloat(displayValue) / 100;
       setDisplayValue(percent.toString());
+      setWaitingForSecondOperand(false);
     }
   }
 
@@ -75,6 +76,7 @@ function CalculatorBody() {
     if (!errorFlagged) {
       const negative = -parseFloat(displayValue);
       setDisplayValue(negative.toString());
+      setWaitingForSecondOperand(false);
     }
   }
 
