@@ -53,7 +53,10 @@ function CalculatorBody() {
   // backspace function.
   function handleBackspace() {
     if (!waitingForSecondOperand) {
-      setDisplayValue((prevValue) => prevValue.slice(0, -1) || "0");
+      setDisplayValue((prevValue) => {
+        const sliced = prevValue.slice(0, -1);
+        return (sliced && sliced !== "-" && sliced) || "0";
+      });
     } else if (!errorFlagged) {
       setDisplayValue("0");
       setWaitingForSecondOperand(false);
@@ -74,9 +77,15 @@ function CalculatorBody() {
   // toggles number between negative and positive
   function handleNegative() {
     if (!errorFlagged) {
-      const negative = -parseFloat(displayValue);
-      setDisplayValue(negative.toString());
-      setWaitingForSecondOperand(false);
+      if (!displayValue.startsWith("-")) {
+        const negative = "-".concat(displayValue);
+        setDisplayValue(negative);
+        setWaitingForSecondOperand(false);
+      } else if (displayValue.startsWith("-")) {
+        const negative = displayValue.slice(1);
+        setDisplayValue(negative);
+        setWaitingForSecondOperand(false);
+      }
     }
   }
 
