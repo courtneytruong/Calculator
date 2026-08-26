@@ -1,8 +1,13 @@
 import CalculatorDisplay from "./CalculatorDisplay";
 import CalculatorButtonContainer from "./CalculatorButtonContainer";
-import { useState } from "react";
+import CalculatorReducer, {
+  ACTIONS,
+  initialState,
+} from "../Utilities/calculatorReducer";
+import { useState, useReducer } from "react";
 
 function CalculatorBody() {
+  const [state, dispatch] = useReducer(CalculatorReducer, initialState);
   const [displayValue, setDisplayValue] = useState("0");
   const [operator, setOperator] = useState(null);
   const [firstOperand, setFirstOperand] = useState(null);
@@ -42,12 +47,7 @@ function CalculatorBody() {
 
   // resets states to clear the calculator
   function handleClear() {
-    setDisplayValue("0");
-    setOperator(null);
-    setFirstOperand(null);
-    setWaitingForSecondOperand(false);
-    setLastOperand(null);
-    setErrorFlagged(false);
+    dispatch({ type: ACTIONS.CLEAR });
   }
 
   // backspace function.
@@ -152,12 +152,7 @@ function CalculatorBody() {
 
   // logic for updating the digits on the display
   function handleDigit(userInput) {
-    setErrorFlagged(false);
-    setDisplayValue((prevValue) => {
-      const shouldOverwrite = waitingForSecondOperand || prevValue === "0";
-      return shouldOverwrite ? userInput : prevValue + userInput;
-    });
-    setWaitingForSecondOperand(false);
+    dispatch({ type: ACTIONS.DIGIT, payload: userInput });
   }
 
   function handleButtonClick(userInput) {
@@ -193,7 +188,7 @@ function CalculatorBody() {
 
   return (
     <div className="bg-neutral-900 px-1 pt-4 pb-1 w-[300px] h-[570px]  ">
-      <CalculatorDisplay value={displayValue}></CalculatorDisplay>
+      <CalculatorDisplay value={state.displayValue}></CalculatorDisplay>
       <CalculatorButtonContainer
         onClick={handleButtonClick}
       ></CalculatorButtonContainer>
