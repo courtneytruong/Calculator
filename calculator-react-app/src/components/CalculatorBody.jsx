@@ -3,7 +3,7 @@ import CalculatorButtonContainer from "./CalculatorButtonContainer";
 import CalculatorReducer, {
   ACTIONS,
   initialState,
-} from "../Utilities/calculatorReducer";
+} from "../Utilities/CalculatorReducer";
 import { useReducer } from "react";
 
 function CalculatorBody() {
