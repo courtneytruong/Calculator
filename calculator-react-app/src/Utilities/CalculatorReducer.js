@@ -1,6 +1,12 @@
 export const ACTIONS = {
   CLEAR: "clear",
   DIGIT: "digit",
+  BACKSPACE: "backspace",
+  EQUALS: "equals",
+  PERCENT: "percent",
+  NEGATIVE: "negative",
+  OPERATOR: "operator",
+  DECIMAL: "decimal",
 };
 
 export const initialState = {
@@ -11,6 +17,35 @@ export const initialState = {
   lastOperand: null,
   errorFlagged: false,
 };
+
+function calculate(firstOperand, secondOperand, operator) {
+  if (secondOperand === null) {
+    throw new Error("Missing Second Operand");
+  } else {
+    let calculateResult;
+    switch (operator) {
+      case "+":
+        calculateResult = firstOperand + secondOperand;
+        break;
+      case "-":
+        calculateResult = firstOperand - secondOperand;
+        break;
+      case "*":
+        calculateResult = firstOperand * secondOperand;
+        break;
+      case "/":
+        if (secondOperand === 0) {
+          throw new Error("Cannot divide by zero");
+        }
+        calculateResult = firstOperand / secondOperand;
+        break;
+      default:
+        calculateResult = secondOperand;
+        break;
+    }
+    return parseFloat(calculateResult.toFixed(9));
+  }
+}
 
 function CalculatorReducer(state, action) {
   switch (action.type) {
@@ -28,6 +63,154 @@ function CalculatorReducer(state, action) {
         displayValue: overWrite,
         waitingForSecondOperand: false,
       };
+    }
+    case ACTIONS.BACKSPACE: {
+      const sliced = state.displayValue.slice(0, -1);
+      const slicedDisplay = (sliced && sliced !== "-" && sliced) || "0";
+      if (!state.waitingForSecondOperand) {
+        return {
+          ...state,
+          displayValue: slicedDisplay,
+        };
+      } else if (!state.errorFlagged) {
+        return {
+          ...state,
+          displayValue: "0",
+          waitingForSecondOperand: false,
+        };
+      } else {
+        return initialState;
+      }
+    }
+    case ACTIONS.EQUALS: {
+      try {
+        if (!state.errorFlagged) {
+          if (state.waitingForSecondOperand) {
+            const result = calculate(
+              state.firstOperand,
+              state.lastOperand,
+              state.operator,
+            );
+            return {
+              ...state,
+              displayValue: result.toString(),
+              firstOperand: result,
+            };
+          } else {
+            const secondResult = calculate(
+              state.firstOperand,
+              parseFloat(state.displayValue),
+              state.operator,
+            );
+            return {
+              ...state,
+              displayValue: secondResult.toString(),
+              firstOperand: secondResult,
+              waitingForSecondOperand: true,
+              lastOperand: parseFloat(state.displayValue),
+            };
+          }
+        }
+      } catch (error) {
+        return {
+          ...state,
+          errorFlagged: true,
+          displayValue: error.message,
+          operator: null,
+          firstOperand: null,
+          waitingForSecondOperand: true,
+        };
+      }
+      return state;
+    }
+    case ACTIONS.OPERATOR:
+      {
+        if (!state.errorFlagged) {
+          if (state.firstOperand === null) {
+            const parsedDisplayValue = parseFloat(state.displayValue);
+            return {
+              ...state,
+              firstOperand: parsedDisplayValue,
+              operator: action.payload,
+              waitingForSecondOperand: true,
+              lastOperand: null,
+            };
+          } else if (state.operator && !state.waitingForSecondOperand) {
+            try {
+              const result = calculate(
+                state.firstOperand,
+                parseFloat(state.displayValue),
+                state.operator,
+              );
+              return {
+                ...state,
+                displayValue: result.toString(),
+                firstOperand: result,
+                operator: action.payload,
+                waitingForSecondOperand: true,
+                lastOperand: null,
+              };
+            } catch (error) {
+              return {
+                ...state,
+                errorFlagged: true,
+                displayValue: error.message,
+                operator: null,
+                firstOperand: null,
+                waitingForSecondOperand: true,
+              };
+            }
+          }
+        }
+      }
+      return state;
+    case ACTIONS.PERCENT: {
+      if (!state.errorFlagged) {
+        const percent = parseFloat(state.displayValue) / 100;
+        return {
+          ...state,
+          displayValue: percent.toString(),
+          waitingForSecondOperand: false,
+        };
+      }
+      return state;
+    }
+    case ACTIONS.NEGATIVE: {
+      if (!state.errorFlagged) {
+        if (!state.displayValue.startsWith("-")) {
+          const negative = "-".concat(state.displayValue);
+          return {
+            ...state,
+            displayValue: negative,
+            waitingForSecondOperand: false,
+          };
+        } else if (state.displayValue.startsWith("-")) {
+          const negative = state.displayValue.slice(1);
+          return {
+            ...state,
+            displayValue: negative,
+            waitingForSecondOperand: false,
+          };
+        }
+      }
+      return state;
+    }
+    case ACTIONS.DECIMAL: {
+      if (state.waitingForSecondOperand) {
+        return {
+          ...state,
+          displayValue: "0.",
+          errorFlagged: false,
+          waitingForSecondOperand: false,
+        };
+      } else if (!state.displayValue.includes(".")) {
+        return {
+          ...state,
+          displayValue: state.displayValue + ".",
+          waitingForSecondOperand: false,
+        };
+      }
+      return state;
     }
     default:
       return state;
