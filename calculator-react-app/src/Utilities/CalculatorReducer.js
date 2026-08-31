@@ -1,5 +1,4 @@
 import Calculate from "./Calculate";
-
 export const ACTIONS = {
   CLEAR: "clear",
   DIGIT: "digit",
@@ -113,6 +112,13 @@ function CalculatorReducer(state, action) {
               waitingForSecondOperand: true,
               lastOperand: null,
             };
+          }
+          if (state.operator && state.waitingForSecondOperand) {
+            return {
+              ...state,
+              operator: action.payload,
+              lastOperand: null,
+            };
           } else if (state.operator && !state.waitingForSecondOperand) {
             try {
               const result = Calculate(
@@ -145,15 +151,26 @@ function CalculatorReducer(state, action) {
     // percent function divides number by 100 to find percent
     case ACTIONS.PERCENT: {
       if (!state.errorFlagged) {
-        const percent = parseFloat(state.displayValue) / 100;
-        return {
-          ...state,
-          displayValue: percent.toString(),
-          waitingForSecondOperand: false,
-        };
+        if (state.firstOperand !== null) {
+          const percentResult =
+            (state.firstOperand * parseFloat(state.displayValue)) / 100;
+          return {
+            ...state,
+            displayValue: percentResult.toString(),
+            waitingForSecondOperand: false,
+          };
+        } else if (state.firstOperand === null) {
+          const percent = parseFloat(state.displayValue) / 100;
+          return {
+            ...state,
+            displayValue: percent.toString(),
+            waitingForSecondOperand: false,
+          };
+        }
       }
       return state;
     }
+
     // toggles number between negative and positive
     case ACTIONS.NEGATIVE: {
       if (!state.errorFlagged) {
