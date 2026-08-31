@@ -22,8 +22,10 @@ export const initialState = {
 
 function CalculatorReducer(state, action) {
   switch (action.type) {
+    // resets states to clear the calculator
     case ACTIONS.CLEAR:
       return initialState;
+    // logic for updating the digits on the display
     case ACTIONS.DIGIT: {
       const shouldOverwrite =
         state.waitingForSecondOperand || state.displayValue === "0";
@@ -37,6 +39,7 @@ function CalculatorReducer(state, action) {
         waitingForSecondOperand: false,
       };
     }
+    // backspace function.
     case ACTIONS.BACKSPACE: {
       const sliced = state.displayValue.slice(0, -1);
       const slicedDisplay = (sliced && sliced !== "-" && sliced) || "0";
@@ -55,6 +58,7 @@ function CalculatorReducer(state, action) {
         return initialState;
       }
     }
+    // logic for how = button works
     case ACTIONS.EQUALS: {
       try {
         if (!state.errorFlagged) {
@@ -96,6 +100,7 @@ function CalculatorReducer(state, action) {
       }
       return state;
     }
+    // logic for what calculation to do from calculate based on which operator button is used
     case ACTIONS.OPERATOR:
       {
         if (!state.errorFlagged) {
@@ -137,6 +142,7 @@ function CalculatorReducer(state, action) {
         }
       }
       return state;
+    // percent function divides number by 100 to find percent
     case ACTIONS.PERCENT: {
       if (!state.errorFlagged) {
         const percent = parseFloat(state.displayValue) / 100;
@@ -148,6 +154,7 @@ function CalculatorReducer(state, action) {
       }
       return state;
     }
+    // toggles number between negative and positive
     case ACTIONS.NEGATIVE: {
       if (!state.errorFlagged) {
         if (!state.displayValue.startsWith("-")) {
@@ -168,6 +175,7 @@ function CalculatorReducer(state, action) {
       }
       return state;
     }
+    // logic for decimal point button. only allows one decimal point per operand
     case ACTIONS.DECIMAL: {
       if (state.waitingForSecondOperand) {
         return {

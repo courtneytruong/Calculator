@@ -9,74 +9,34 @@ import { useReducer } from "react";
 function CalculatorBody() {
   const [state, dispatch] = useReducer(CalculatorReducer, initialState);
 
-  // resets states to clear the calculator
-  function handleClear() {
-    dispatch({ type: ACTIONS.CLEAR });
-  }
-
-  // backspace function.
-  function handleBackspace() {
-    dispatch({ type: ACTIONS.BACKSPACE });
-  }
-
-  // percent function divides number by 100 to find percent
-  function handlePercent() {
-    dispatch({ type: ACTIONS.PERCENT });
-  }
-
-  // toggles number between negative and positive
-  function handleNegative() {
-    dispatch({ type: ACTIONS.NEGATIVE });
-  }
-
-  // logic for how = button works
-  function handleEquals() {
-    dispatch({ type: ACTIONS.EQUALS });
-  }
-
-  // logic for what calculation to do from calculate based on which operator button is used
-  function handleOperator(userInput) {
-    dispatch({ type: ACTIONS.OPERATOR, payload: userInput });
-  }
-
-  // logic for decimal point button. only allows one decimal point per operand
-  function handleDecimal() {
-    dispatch({ type: ACTIONS.DECIMAL });
-  }
-
-  // logic for updating the digits on the display
-  function handleDigit(userInput) {
-    dispatch({ type: ACTIONS.DIGIT, payload: userInput });
-  }
-
   function handleButtonClick(userInput) {
     switch (userInput) {
       case "clear":
-        handleClear();
+        dispatch({ type: ACTIONS.CLEAR });
         break;
       case "backspace":
-        handleBackspace();
+        dispatch({ type: ACTIONS.BACKSPACE });
         break;
       case ".":
-        handleDecimal();
+        dispatch({ type: ACTIONS.DECIMAL });
         break;
       case "%":
-        handlePercent();
+        dispatch({ type: ACTIONS.PERCENT });
         break;
       case "+/-":
-        handleNegative();
+        dispatch({ type: ACTIONS.NEGATIVE });
         break;
       case "=":
-        handleEquals();
+        dispatch({ type: ACTIONS.EQUALS });
         break;
       case "+":
       case "-":
       case "*":
       case "/":
-        handleOperator(userInput);
+        dispatch({ type: ACTIONS.OPERATOR, payload: userInput });
         break;
       default:
-        handleDigit(userInput);
+        dispatch({ type: ACTIONS.DIGIT, payload: userInput });
     }
   }
 
