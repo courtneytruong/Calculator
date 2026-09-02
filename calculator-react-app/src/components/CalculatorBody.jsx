@@ -4,10 +4,44 @@ import CalculatorReducer, {
   ACTIONS,
   initialState,
 } from "../Utilities/CalculatorReducer";
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 
 function CalculatorBody() {
   const [state, dispatch] = useReducer(CalculatorReducer, initialState);
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      const key = event.key;
+      if (
+        (key >= "0" && key <= "9") ||
+        key === "." ||
+        key === "%" ||
+        key === "+" ||
+        key === "-" ||
+        key === "*"
+      ) {
+        handleButtonClick(key);
+      } else if (key === "Backspace" || key === "Delete") {
+        event.preventDefault(); // Prevent default backspace behavior (navigation)
+        handleButtonClick("backspace");
+      } else if (key === "Enter" || key === "=") {
+        event.preventDefault(); // Prevent default enter behavior (navigation)
+        handleButtonClick("=");
+      } else if (key === "Escape" || key === "c" || key === "C") {
+        handleButtonClick("clear");
+      } else if (key === "/") {
+        event.preventDefault(); // Prevent default behavior (navigation)
+        handleButtonClick("/");
+      } else if (key === "_") {
+        event.preventDefault(); // Prevent default behavior (navigation)
+        handleButtonClick("+/-");
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   function handleButtonClick(userInput) {
     switch (userInput) {
