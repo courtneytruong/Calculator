@@ -1,4 +1,5 @@
 import { useRef, useLayoutEffect } from "react";
+import HistoryLine from "./HistoryLine";
 
 function CalculatorDisplay({ value }) {
   const displayRef = useRef(null);
@@ -13,9 +14,12 @@ function CalculatorDisplay({ value }) {
   return (
     <div
       ref={displayRef}
-      className="flex justify-end items-end leading-none font-bold text-white px-4 py-2 w-full h-1/3"
+      className="flex flex-col justify-end items-end leading-none font-bold text-white px-4 py-2 w-full h-1/3"
     >
-      {value}
+      <div>
+        <HistoryLine />
+      </div>
+      <div>{value}</div>
     </div>
   );
 }
