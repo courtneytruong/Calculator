@@ -17,6 +17,7 @@ export const initialState = {
   waitingForSecondOperand: false,
   lastOperand: null,
   errorFlagged: false,
+  historyLine: null,
 };
 
 function CalculatorReducer(state, action) {
@@ -36,6 +37,7 @@ function CalculatorReducer(state, action) {
         errorFlagged: false,
         displayValue: overWrite,
         waitingForSecondOperand: false,
+        historyLine: null,
       };
     }
     // backspace function.
@@ -46,12 +48,14 @@ function CalculatorReducer(state, action) {
         return {
           ...state,
           displayValue: slicedDisplay,
+          historyLine: null,
         };
       } else if (!state.errorFlagged) {
         return {
           ...state,
           displayValue: "0",
           waitingForSecondOperand: false,
+          historyLine: null,
         };
       } else {
         return initialState;
@@ -71,11 +75,13 @@ function CalculatorReducer(state, action) {
               ...state,
               displayValue: result.toString(),
               firstOperand: result,
+              historyLine: `${state.firstOperand || ""} ${state.operator || ""} ${state.lastOperand || ""}`,
             };
           } else {
+            const secondOperand = parseFloat(state.displayValue);
             const secondResult = Calculate(
               state.firstOperand,
-              parseFloat(state.displayValue),
+              secondOperand,
               state.operator,
             );
             return {
@@ -83,7 +89,8 @@ function CalculatorReducer(state, action) {
               displayValue: secondResult.toString(),
               firstOperand: secondResult,
               waitingForSecondOperand: true,
-              lastOperand: parseFloat(state.displayValue),
+              lastOperand: secondOperand,
+              historyLine: `${state.firstOperand || ""} ${state.operator || ""} ${secondOperand || ""}`,
             };
           }
         }
@@ -95,6 +102,7 @@ function CalculatorReducer(state, action) {
           operator: null,
           firstOperand: null,
           waitingForSecondOperand: true,
+          historyLine: null,
         };
       }
       return state;
@@ -111,6 +119,7 @@ function CalculatorReducer(state, action) {
               operator: action.payload,
               waitingForSecondOperand: true,
               lastOperand: null,
+              historyLine: null,
             };
           }
           if (state.operator && state.waitingForSecondOperand) {
@@ -118,6 +127,7 @@ function CalculatorReducer(state, action) {
               ...state,
               operator: action.payload,
               lastOperand: null,
+              historyLine: null,
             };
           } else if (state.operator && !state.waitingForSecondOperand) {
             try {
@@ -133,6 +143,7 @@ function CalculatorReducer(state, action) {
                 operator: action.payload,
                 waitingForSecondOperand: true,
                 lastOperand: null,
+                historyLine: null,
               };
             } catch (error) {
               return {
@@ -142,6 +153,7 @@ function CalculatorReducer(state, action) {
                 operator: null,
                 firstOperand: null,
                 waitingForSecondOperand: true,
+                historyLine: null,
               };
             }
           }
@@ -158,6 +170,7 @@ function CalculatorReducer(state, action) {
             ...state,
             displayValue: percentResult.toString(),
             waitingForSecondOperand: false,
+            historyLine: null,
           };
         } else if (state.firstOperand === null) {
           const percent = parseFloat(state.displayValue) / 100;
@@ -165,6 +178,7 @@ function CalculatorReducer(state, action) {
             ...state,
             displayValue: percent.toString(),
             waitingForSecondOperand: false,
+            historyLine: null,
           };
         }
       }
@@ -180,6 +194,7 @@ function CalculatorReducer(state, action) {
             ...state,
             displayValue: negative,
             waitingForSecondOperand: false,
+            historyLine: null,
           };
         } else if (state.displayValue.startsWith("-")) {
           const negative = state.displayValue.slice(1);
@@ -187,6 +202,7 @@ function CalculatorReducer(state, action) {
             ...state,
             displayValue: negative,
             waitingForSecondOperand: false,
+            historyLine: null,
           };
         }
       }
@@ -200,12 +216,14 @@ function CalculatorReducer(state, action) {
           displayValue: "0.",
           errorFlagged: false,
           waitingForSecondOperand: false,
+          historyLine: null,
         };
       } else if (!state.displayValue.includes(".")) {
         return {
           ...state,
           displayValue: state.displayValue + ".",
           waitingForSecondOperand: false,
+          historyLine: null,
         };
       }
       return state;
