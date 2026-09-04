@@ -43,6 +43,23 @@ function CalculatorBody() {
     };
   }, []);
 
+  function handleDisplayChange() {
+    if (state.operator === null && state.historyLine === null) {
+      const newDisplayValue = state.displayValue;
+      return newDisplayValue;
+    } else if (state.waitingForSecondOperand && state.historyLine === null) {
+      const newDisplayValue = state.firstOperand + " " + state.operator;
+      return newDisplayValue;
+    } else if (state.waitingForSecondOperand && state.historyLine !== null) {
+      const newDisplayValue = state.displayValue;
+      return newDisplayValue;
+    } else if (!state.waitingForSecondOperand) {
+      const newDisplayValue =
+        state.firstOperand + " " + state.operator + " " + state.displayValue;
+      return newDisplayValue;
+    }
+  }
+
   function handleButtonClick(userInput) {
     switch (userInput) {
       case "clear":
@@ -77,7 +94,7 @@ function CalculatorBody() {
   return (
     <div className="bg-neutral-900 px-1 pt-4 pb-1 w-[300px] h-[570px]  ">
       <CalculatorDisplay
-        value={state.displayValue}
+        value={handleDisplayChange()}
         historyLine={state.historyLine}
       ></CalculatorDisplay>
       <CalculatorButtonContainer
