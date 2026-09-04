@@ -4,10 +4,10 @@ A calculator built twice: first as a C# console app, then as a React + Vite + Ta
 
 ## Projects
 
-| Project | Stack | Description |
-| --- | --- | --- |
-| [`calculator-console-app`](calculator-console-app) | C# / .NET | Terminal-based calculator that prompts for numbers and operators and chains operations interactively. |
-| [`calculator-react-app`](calculator-react-app) | React 19, Vite, Tailwind CSS | A styled, keyboard-accessible calculator UI in the browser. |
+| Project                                            | Stack                        | Description                                                                                           |
+| -------------------------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [`calculator-console-app`](calculator-console-app) | C# / .NET                    | Terminal-based calculator that prompts for numbers and operators and chains operations interactively. |
+| [`calculator-react-app`](calculator-react-app)     | React 19, Vite, Tailwind CSS | A styled, keyboard-accessible calculator UI in the browser.                                           |
 
 ---
 
@@ -83,21 +83,21 @@ ErrorHandling.cs      # input validation and correction
 
 **React app**
 
-| Issue | Fix |
-| --- | --- |
-| `npm install` fails or the app won't start | Delete `node_modules` and `package-lock.json` in `calculator-react-app`, then run `npm install` again. |
-| Port `5173` already in use | Vite will offer the next free port automatically — check the terminal output for the actual URL, or stop whatever else is running on that port. |
-| Styles missing or not updating | Confirm the dev server is running via `npm run dev` (Tailwind is compiled through the `@tailwindcss/vite` plugin, so it won't apply to a stale `dist/` build — run `npm run build` again after changes). |
-| Keyboard shortcuts not responding | Click the page first so it has focus; the listener is attached to `window` and browser extensions or focused input fields elsewhere on the page can intercept key events. |
-| Display shows an error message you can't clear | Press `C`/`Escape` or click the clear button — errors (like divide by zero) set a flag that only `CLEAR` resets. |
+| Issue                                          | Fix                                                                                                                                                                                                      |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm install` fails or the app won't start     | Delete `node_modules` and `package-lock.json` in `calculator-react-app`, then run `npm install` again.                                                                                                   |
+| Port `5173` already in use                     | Vite will offer the next free port automatically — check the terminal output for the actual URL, or stop whatever else is running on that port.                                                          |
+| Styles missing or not updating                 | Confirm the dev server is running via `npm run dev` (Tailwind is compiled through the `@tailwindcss/vite` plugin, so it won't apply to a stale `dist/` build — run `npm run build` again after changes). |
+| Keyboard shortcuts not responding              | Click the page first so it has focus; the listener is attached to `window` and browser extensions or focused input fields elsewhere on the page can intercept key events.                                |
+| Display shows an error message you can't clear | Press `C`/`Escape` or click the clear button — errors (like divide by zero) set a flag that only `CLEAR` resets.                                                                                         |
 
 **Console app**
 
-| Issue | Fix |
-| --- | --- |
+| Issue                                        | Fix                                                                                                                                                                                     |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `dotnet run` fails with an SDK version error | This project targets `net10.0` — install the matching [.NET SDK](https://dotnet.microsoft.com/download) or update `TargetFramework` in `Calculator.csproj` to match your installed SDK. |
-| `dotnet: command not found` | The .NET SDK isn't installed or isn't on your `PATH`. Verify with `dotnet --version`. |
-| Stale build errors after pulling changes | Delete the `bin` and `obj` folders in `calculator-console-app` and run `dotnet run` again. |
+| `dotnet: command not found`                  | The .NET SDK isn't installed or isn't on your `PATH`. Verify with `dotnet --version`.                                                                                                   |
+| Stale build errors after pulling changes     | Delete the `bin` and `obj` folders in `calculator-console-app` and run `dotnet run` again.                                                                                              |
 
 ## Roadmap
 
@@ -106,4 +106,4 @@ ErrorHandling.cs      # input validation and correction
 - [x] Keyboard input support
 - [x] Display overflow handling
 - [x] Calculation history line
-- [ ] Deploy to GitHub Pages
+- [x] Deploy to GitHub Pages
