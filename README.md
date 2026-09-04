@@ -15,6 +15,8 @@ A calculator built twice: first as a C# console app, then as a React + Vite + Ta
 
 A calculator UI styled after classic pocket calculators, built with React and Tailwind CSS.
 
+**Live demo:** [courtneytruong.github.io/Calculator](https://courtneytruong.github.io/Calculator/)
+
 ### Features
 
 - Standard operations: add, subtract, multiply, divide
